@@ -1,17 +1,11 @@
-package Calculator;
+package Calculator.ProgFiles;
 
 import java.io.IOException;
-import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Main {
     static Scanner scanner = new Scanner(System.in);
     static Calculator calculator = new Calculator();
-    static char operation;
-    static boolean isRoman = true;
-    static int number1;
-    static int number2;
-    static int result;
 
     public static void main(String[] args) throws CalculatorException {
         System.out.println("""
@@ -30,55 +24,67 @@ public class Main {
         while (true) {
             System.out.println("---Enter the operation---");
             String userInput = scanner.nextLine();
-            char[] inputData = new char[10];
+            String result = calc(userInput);
+            System.out.println(result);
+        }
+    }
 
-            for (int i = 0; i < userInput.length(); i++) {
-                inputData[i] = userInput.charAt(i);
-                if (inputData[i] == '+') {
-                    operation = '+';
-                } else if (inputData[i] == '-') {
-                    operation = '-';
-                } else if (inputData[i] == '*') {
-                    operation = '*';
-                } else if (inputData[i] == '/') {
-                    operation = '/';
-                }
-            }
-
-            String under_charString = String.valueOf(inputData);
-            String[] blacks = under_charString.split("[+-/*]");
-            try {
-                String firstVariable = blacks[0];
-                String secondVariable = blacks[1];
-                firstVariable = firstVariable.trim();
-                secondVariable = secondVariable.trim();
-
-                isRoman = calculator.isRoman(firstVariable, secondVariable, isRoman);
-
-                number1 = calculator.stringToInteger(firstVariable);
-                number2 = calculator.stringToInteger(secondVariable);
-            } catch (ArrayIndexOutOfBoundsException e) {
-                throw new CalculatorException("---Invalid operation sign---");
-            }
+    public static String calc(String userInput) throws CalculatorException {
+        char[] inputData = new char[10];
+        int resultArabic;
+        String resultRoman;
+        boolean isRoman = true;
+        char operation = 0;
+        int number1;
+        int number2;
+        int result;
 
 
-            if (number1 < 0 || number2 < 0) {
-                try {
-                    throw new IOException();
-                } catch (IOException e) {
-                    throw new CalculatorException("---Invalid data format---");
-                }
-            } else if (isRoman){
-                result = calculator.calculated(number1, number2, operation);
-                System.out.println("---Result for Roman numerals---");
-                String resultRoman = calculator.arabicToRoman(result);
-                System.out.println(resultRoman);
-            } else {
-                result = calculator.calculated(number1, number2, operation);
-                System.out.println("--Result for Arabic numerals---");
-                System.out.println(result);
+        for (int i = 0; i < userInput.length(); i++) {
+            inputData[i] = userInput.charAt(i);
+            if (inputData[i] == '+') {
+                operation = '+';
+            } else if (inputData[i] == '-') {
+                operation = '-';
+            } else if (inputData[i] == '*') {
+                operation = '*';
+            } else if (inputData[i] == '/') {
+                operation = '/';
             }
         }
+
+        String under_charString = String.valueOf(inputData);
+        String[] blacks = under_charString.split("[+-/*]");
+        if (blacks.length>2)
+            throw new CalculatorException("---The calculator is performing only with two numbers---");
+        try {
+            String firstVariable = blacks[0];
+            String secondVariable = blacks[1];
+            firstVariable = firstVariable.trim();
+            secondVariable = secondVariable.trim();
+
+            isRoman = calculator.isRoman(firstVariable, secondVariable, isRoman);
+
+            number1 = calculator.stringToInteger(firstVariable);
+            number2 = calculator.stringToInteger(secondVariable);
+        } catch (ArrayIndexOutOfBoundsException e) {
+            throw new CalculatorException("---Invalid operation sign---");
+        }
+
+        if (number1 < 0 || number2 < 0) {
+            try {
+                throw new IOException();
+            } catch (IOException e) {
+                throw new CalculatorException("---Invalid data format---");
+            }
+        } else if (isRoman){
+            result = calculator.calculated(number1, number2, operation);
+            resultRoman = calculator.arabicToRoman(result);
+            return "---Result for Roman numerals---\n" + resultRoman;
+        } else {
+            resultArabic = calculator.calculated(number1, number2, operation);
+        }
+        return "---Result for Arabic numerals---\n" + resultArabic;
     }
 }
 

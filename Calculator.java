@@ -1,7 +1,6 @@
-package Calculator;
+package Calculator.ProgFiles;
 
 import java.util.InputMismatchException;
-
 public class Calculator {
 
     public int calculated(int num1, int num2, char op) throws CalculatorException {
@@ -79,12 +78,9 @@ public class Calculator {
             }
         }
         if (!firstIs && !secondIs) return !b;
-        if (!firstIs && secondIs)
+        if ((!firstIs && secondIs) || (firstIs && !secondIs))
             throw new CalculatorException
-                    ("---The calculator does not know how to work with Arabic and Roman numerals at the same time---");
-        if (firstIs && !secondIs)
-            throw new CalculatorException
-                    ("---The calculator does not know how to work with Arabic and Roman numerals at the same time---");
+                    ("---Incorrect variable input type---");
         return b;
     }
 
