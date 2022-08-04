@@ -25,7 +25,7 @@ public class Main {
             System.out.println("---Enter the operation---");
             String userInput = scanner.nextLine();
             String result = calc(userInput);
-            System.out.println(result);
+            System.out.println(result + "\n");
         }
     }
 
@@ -79,8 +79,16 @@ public class Main {
             }
         } else if (isRoman){
             result = calculator.calculated(number1, number2, operation);
-            resultRoman = calculator.arabicToRoman(result);
-            return "---Result for Roman numerals---\n" + resultRoman;
+            if (result<1) {
+                try {
+                    throw new IOException();
+                } catch (IOException e) {
+                    throw new CalculatorException("---Result for Roman numerals can not be 0---");
+                }
+            } else {
+                resultRoman = calculator.arabicToRoman(result);
+                return "---Result for Roman numerals---\n" + resultRoman;
+            }
         } else {
             resultArabic = calculator.calculated(number1, number2, operation);
         }
